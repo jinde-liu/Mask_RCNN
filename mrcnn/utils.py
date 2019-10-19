@@ -253,12 +253,13 @@ class Dataset(object):
     """
 
     def __init__(self, class_map=None):
-        self._image_ids = []
+        self._image_ids = [] #image id from 0 to num_images-1 --kidd
         self.image_info = []
         # Background is always the first class
         self.class_info = [{"source": "", "id": 0, "name": "BG"}]
         self.source_class_ids = {}
 
+    #add image classes --kidd
     def add_class(self, source, class_id, class_name):
         assert "." not in source, "Source name cannot contain a dot"
         # Does the class exist already?
@@ -272,7 +273,7 @@ class Dataset(object):
             "id": class_id,
             "name": class_name,
         })
-
+    #add image info like image id and path --kidd
     def add_image(self, source, image_id, path, **kwargs):
         image_info = {
             "id": image_id,
