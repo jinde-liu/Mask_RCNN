@@ -801,6 +801,7 @@ def compute_recall(pred_boxes, gt_boxes, iou):
 # an easy way to support batches > 1 quickly with little code modification.
 # In the long run, it's more efficient to modify the code to support large
 # batches and getting rid of this function. Consider this a temporary solution
+# many tf funcitons like  tf.image.non_max_suppression deal with one image that's why using batch_slice --kidd
 def batch_slice(inputs, graph_fn, batch_size, names=None):
     """Splits inputs into slices and feeds each slice to a copy of the given
     computation graph and then combines the results. It allows you to run a

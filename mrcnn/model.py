@@ -236,6 +236,7 @@ def apply_box_deltas_graph(boxes, deltas):
 
 def clip_boxes_graph(boxes, window):
     """
+    Clip boxes to image boundaries --kidd
     boxes: [N, (y1, x1, y2, x2)]
     window: [4] in the form y1, x1, y2, x2
     """
@@ -353,7 +354,8 @@ class PyramidROIAlign(KE.Layer):
              boxes to fill the array.
     - image_meta: [batch, (meta data)] Image details. See compose_image_meta()
     - feature_maps: List of feature maps from different levels of the pyramid.
-                    Each is [batch, height, width, channels]
+                    Each is [batch, height, width, channels]/
+                    feature maps have different scales each has a shape of [batch, height, width, channels]
 
     Output:
     Pooled regions in the shape: [batch, num_boxes, pool_height, pool_width, channels].
@@ -399,7 +401,7 @@ class PyramidROIAlign(KE.Layer):
             ix = tf.where(tf.equal(roi_level, level))
             level_boxes = tf.gather_nd(boxes, ix)
 
-            # Box indices for crop_and_resize.
+            # Box indices for crop_and_resize. corresponding to which image --kidd
             box_indices = tf.cast(ix[:, 0], tf.int32)
 
             # Keep track of which box is mapped to which level
@@ -1899,6 +1901,7 @@ class MaskRCNN():
         else:
             _, C2, C3, C4, C5 = resnet_graph(input_image, config.BACKBONE,
                                              stage5=True, train_bn=config.TRAIN_BN)
+        # Build FPN for RPN --kidd
         # Top-down Layers
         # TODO: add assert to varify feature map sizes match what's in config
         P5 = KL.Conv2D(config.TOP_DOWN_PYRAMID_SIZE, (1, 1), name='fpn_c5p5')(C5)
@@ -2604,11 +2607,11 @@ class MaskRCNN():
         if not tuple(image_shape) in self._anchor_cache:
             # Generate Anchors
             a = utils.generate_pyramid_anchors(
-                self.config.RPN_ANCHOR_SCALES,
-                self.config.RPN_ANCHOR_RATIOS,
-                backbone_shapes,
-                self.config.BACKBONE_STRIDES,
-                self.config.RPN_ANCHOR_STRIDE)
+                self.config.RPN_ANCHOR_SCALES, # [32, 64, 128, 256, 512] --kidd
+                self.config.RPN_ANCHOR_RATIOS, # [0.5, 1, 2] --kidd
+                backbone_shapes, # [[256, 256], [128, 128], [64, 64], [32, 32], [16, 16]] --kidd
+                self.config.BACKBONE_STRIDES, # [4, 8, 16, 32, 64] --kidd
+                self.config.RPN_ANCHOR_STRIDE) # 1
             # Keep a copy of the latest anchors in pixel coordinates because
             # it's used in inspect_model notebooks.
             # TODO: Remove this after the notebook are refactored to not use it
