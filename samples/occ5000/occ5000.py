@@ -68,7 +68,8 @@ class Occ5000Config(Config):
              'left_leg', 'right_leg', 'left_feet', 'right_feet',
              'accessory']
     
-    IMAGE_MIN_DIM = 500
+    IMAGE_MIN_DIM = 512
+
     IMAGE_MAX_DIM = 1024
 
 ############################################################
@@ -87,7 +88,7 @@ class Occ5000Dataset(utils.Dataset):
               which is 80% of the whole dataset
         """
         
-        # Add classes
+        # Add classes, can ignore some class here
         classNames = Occ5000Config.CLASS_NAMES
         for className, i in zip(classNames, np.arange(len(Occ5000Config.CLASS_NAMES))):
             self.add_class('occ5000', i+1, Occ5000Config.CLASS_NAMES[i])
@@ -158,7 +159,7 @@ class Occ5000Dataset(utils.Dataset):
         masks = np.stack(masks, axis = 2)
         #classID = np.arange(1,len(Occ5000Config.CLASS_NAMES) + 1)
         
-        return masks, np.array(classID)
+        return masks, np.array(classID).astype(np.int32)
     
     def image_reference(self, image_id):
         """Return the path of the image."""
