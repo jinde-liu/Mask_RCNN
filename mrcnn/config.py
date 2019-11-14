@@ -88,7 +88,7 @@ class Config(object):
     # You can increase this during training to generate more propsals.
     RPN_NMS_THRESHOLD = 0.7
 
-    # How many anchors per image to use for RPN training
+    # How many anchors per image to use for RPN training/ half positive half negtive --kidd
     RPN_TRAIN_ANCHORS_PER_IMAGE = 256
     
     # ROIs kept after tf.nn.top_k and before non-maximum suppression/ how much to pick in tf.nn.top_k --kidd
