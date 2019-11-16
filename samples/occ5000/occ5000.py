@@ -191,7 +191,7 @@ def train(model):
     print("Training network heads")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=30,
+                epochs=1,
                 layers='heads')
     
 if __name__ == '__main__':
@@ -201,7 +201,7 @@ if __name__ == '__main__':
     description='Train Mask R-CNN on occ5000.')
     
     parser.add_argument('command',
-                        metavar="<command>',
+                        metavar="<command>",
                         help="'train'")
     parser.add_argument('--dataset', required=False,
                         metavar='/path/to/occ5000',
@@ -220,7 +220,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     if args.command == "train":
-    assert args.dataset, "Argument --dataset is required for training"
+        assert args.dataset, "Argument --dataset is required for training"
     print("Weights: ", args.weights)
     print("Dataset: ", args.dataset)
     print("Logs: ", args.logs)
