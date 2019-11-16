@@ -193,6 +193,11 @@ def train(model):
                 learning_rate=config.LEARNING_RATE,
                 epochs=30,
                 layers='heads')
+
+############################################################
+#  Evaluation
+###########################################################    
+#def evaluate_occ5000(model, dataset, coco, eval_type="bbox", limit=0, image_ids=None):
     
 if __name__ == '__main__':
     import argparse
